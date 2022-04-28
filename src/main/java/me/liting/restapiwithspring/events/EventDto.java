@@ -1,17 +1,14 @@
 package me.liting.restapiwithspring.events;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-
-@Builder @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @EqualsAndHashCode(of="id")
-@Entity
-public class Event {
-    @Id
-    @GeneratedValue
-    private Integer id;
+//입력받는 Dto
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+public class EventDto {
     private String name;
     private String description;
     private LocalDateTime beginEnrollmentDateTime;
@@ -22,10 +19,6 @@ public class Event {
     private int basePrice;//(optional)
     private int maxPrice;//(optional)
     private int limitOfEnrollment;
-    private boolean offline;
-    private boolean free;
-    @Enumerated(EnumType.STRING)//default Odiner 후에 데이터 순서 바뀌면 데이터 꼬이루수도 있음 String 선ho
-    private EventStatus eventStatus= EventStatus.DRAFT;
-
-
 }
+
+//Id 나 free값 안받고 받기로 한 값만 받을수있음
