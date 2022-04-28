@@ -2,12 +2,15 @@ package me.liting.restapiwithspring.events;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of="id")
+@Entity
 public class Event {
-
+    @Id
+    @GeneratedValue
     private Integer id;
     private String name;
     private String description;
@@ -21,6 +24,8 @@ public class Event {
     private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
+    @Enumerated(EnumType.STRING)//default Odiner 후에 데이터 순서 바뀌면 데이터 꼬이루수도 있음 String 선ho
     private EventStatus eventStatus;
+
 
 }
