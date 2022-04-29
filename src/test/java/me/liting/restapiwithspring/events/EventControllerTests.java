@@ -38,9 +38,43 @@ public class EventControllerTests {
 
 //    @MockBean
 //    EventRepository eventRepository;//mock 으로 생성
-
+// api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무시
     @Test
     public void createEvent() throws Exception {
+        EventDto event = EventDto.builder()
+                .name("Spring")
+                .description("REST API Development with Spring")
+                .beginEnrollmentDateTime(LocalDateTime.of(2021, 12 ,22,14 ,21))
+                .closeEnrollmentDateTime(LocalDateTime.of(2021, 12 ,27,14 ,21))
+                .beginEventDateTime(LocalDateTime.of(2021, 12 ,28,14 ,21))
+                .endEventDateTime(LocalDateTime.of(2021, 12 ,29,14 ,21))
+                .basePrice(100)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("밤밭1818")
+                .build();
+//        Mockito.when(eventRepository.save(event)).thenReturn(event);
+        //eventRepository 의 save 호출될때 event object를 받은경우에
+        // event return; EventController 에서 만든 객체는 새로만든 객체임 그래서 목킹적용 x
+
+        mockMvc.perform(post("/api/events/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event))//json 문자열 로 변환
+
+        )
+                .andDo(print()) // request 확인할수있음
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(header().exists(HttpHeaders.LOCATION))//test
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE,MediaTypes.HAL_JSON_VALUE))//test
+                .andExpect(jsonPath("id").value(Matchers.not(100)))
+                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+        ; // result : post request 201
+    }
+    @Test
+    public void createEvent_Bad_Request() throws Exception {
         Event event = Event.builder()
                 .id(100)
                 .name("Spring")
@@ -68,16 +102,9 @@ public class EventControllerTests {
 
         )
                 .andDo(print()) // request 확인할수있음
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))//test
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE,MediaTypes.HAL_JSON_VALUE))//test
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
-        ; // result : post request 201
+                .andExpect(status().isBadRequest())//bad Request  deserialization json  -> object ,unknown properties
+        ;
     }
-
 
 }
 
