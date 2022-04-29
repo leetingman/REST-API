@@ -24,10 +24,13 @@ public class EventController {
 
     private final ModelMapper modelMapper;
 
+    private final EventValidator eventValidator;
 
-    public EventController(EventRepository eventRepository, ModelMapper modelMapper) {
+
+    public EventController(EventRepository eventRepository, ModelMapper modelMapper, EventValidator eventValidator) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
+        this.eventValidator = eventValidator;
     }
 
     @PostMapping
@@ -37,6 +40,15 @@ public class EventController {
             //After Binding if has errors return badRequest
             return ResponseEntity.badRequest().build();
         }
+
+        eventValidator.validate(eventDto,errors);
+
+
+        if(errors.hasErrors()){
+            //After Binding if has errors return badRequest
+            return ResponseEntity.badRequest().build();
+        }
+
 
         //eventDto의 값을 event 의 값으로 변경해야 eventRepository 사용가능
         //ModelMapper 라이브러리 사용하여 해결

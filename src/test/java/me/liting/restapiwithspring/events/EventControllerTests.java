@@ -38,7 +38,7 @@ public class EventControllerTests {
 
 //    @MockBean
 //    EventRepository eventRepository;//mock 으로 생성
-// api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무시
+// api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무
     @Test
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
@@ -110,6 +110,29 @@ public class EventControllerTests {
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
 
         EventDto eventDto= EventDto.builder().build();//input value dose n otexist   -> @Vaild BindingResult
+
+        this.mockMvc.perform(post("/api/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(eventDto))
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createEvent_Bad_Request_Wrong_input() throws Exception {
+        //anotaion 으로 검증하기 어렵d
+        EventDto eventDto= EventDto.builder()
+                .name("Spring")
+                .description("REST API Development with Spring")
+                .beginEnrollmentDateTime(LocalDateTime.of(2021, 12 ,23,14 ,21))
+                .closeEnrollmentDateTime(LocalDateTime.of(2021, 12 ,21,14 ,21))
+                .beginEventDateTime(LocalDateTime.of(2021, 12 ,24,14 ,21))
+                .endEventDateTime(LocalDateTime.of(2021, 12 ,23,14 ,21))
+                .basePrice(10000)//base >max 일
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("밤밭1818")
+                .build();
 
         this.mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON)
