@@ -2,6 +2,7 @@ package me.liting.restapiwithspring.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.liting.restapiwithspring.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,7 @@ public class EventControllerTests {
 //    EventRepository eventRepository;//mock 으로 생성
 // api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무
     @Test
+    @TestDescription("정상적으로 이벤트를 생성하는 테스")
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -74,6 +76,7 @@ public class EventControllerTests {
         ; // result : post request 201
     }
     @Test
+    @TestDescription("입력 받을 수 없는 값을 사용한 경우에 발생하는 이벤트 테스트")
     public void createEvent_Bad_Request() throws Exception {
         Event event = Event.builder()
                 .id(100)
@@ -107,6 +110,7 @@ public class EventControllerTests {
     }
 
     @Test
+    @TestDescription("입력 값이 비어있는 경우에 에러가 발생하는 테스")
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
 
         EventDto eventDto= EventDto.builder().build();//input value dose n otexist   -> @Vaild BindingResult
@@ -118,7 +122,12 @@ public class EventControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * 입력 값이 잘못된 경우에 에러가 발생하는 테스트
+     * @throws Exception
+     */
     @Test
+    @TestDescription("입력 값이 잘못된 경우에 에러가 발생하는 테스트")
     public void createEvent_Bad_Request_Wrong_input() throws Exception {
         //anotaion 으로 검증하기 어렵d
         EventDto eventDto= EventDto.builder()
