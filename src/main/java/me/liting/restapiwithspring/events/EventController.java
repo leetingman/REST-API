@@ -4,10 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -29,7 +31,13 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@RequestBody EventDto eventDto){
+    public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors){
+
+        if(errors.hasErrors()){
+            //After Binding if has errors return badRequest
+            return ResponseEntity.badRequest().build();
+        }
+
         //eventDto의 값을 event 의 값으로 변경해야 eventRepository 사용가능
         //ModelMapper 라이브러리 사용하여 해결
 //        Event event = Event.builder()
@@ -39,7 +47,6 @@ public class EventController {
 
         Event newEvent=this.eventRepository.save(event);
         URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();//p,nullpointE
-        event.setId(10);
         return ResponseEntity.created(createdUri).body(event);
     }
 }
