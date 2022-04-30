@@ -38,7 +38,7 @@ public class EventController {
 
         if(errors.hasErrors()){
             //After Binding if has errors return badRequest
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         eventValidator.validate(eventDto,errors);
@@ -46,9 +46,10 @@ public class EventController {
 
         if(errors.hasErrors()){
             //After Binding if has errors return badRequest
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
-
+        //errors 는 json 으로 변환 불가
+        //event object 는 javabean 스펙을 따름
 
         //eventDto의 값을 event 의 값으로 변경해야 eventRepository 사용가능
         //ModelMapper 라이브러리 사용하여 해결
