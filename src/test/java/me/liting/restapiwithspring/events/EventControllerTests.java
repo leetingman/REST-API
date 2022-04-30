@@ -41,7 +41,7 @@ public class EventControllerTests {
 //    EventRepository eventRepository;//mock 으로 생성
 // api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무
     @Test
-    @TestDescription("정상적으로 이벤트를 생성하는 테스")
+    @TestDescription("정상적으로 이벤트를 생성하는 테스t")
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -70,8 +70,8 @@ public class EventControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))//test
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE,MediaTypes.HAL_JSON_VALUE))//test
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
         ; // result : post request 201
     }
