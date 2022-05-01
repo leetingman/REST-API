@@ -2,6 +2,7 @@ package me.liting.restapiwithspring.events;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -59,7 +60,15 @@ public class EventController {
         Event event = modelMapper.map(eventDto,Event.class);//eventDto trans 4 event.class
         event.update();
         Event newEvent=this.eventRepository.save(event);
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();//p,nullpointE
-        return ResponseEntity.created(createdUri).body(event);
+
+//        ControllerLinkBuilder now is WebMvcLinkBuilder
+//        add link
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        URI createdUri = selfLinkBuilder.toUri();//p,nullpointE
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+//        eventResource.add(selfLinkBuilder.withSelfRel()); EventResource 에서 직접 넣어줌
+        eventResource.add(selfLinkBuilder.withRel("update-event"));//rel href
+        return ResponseEntity.created(createdUri).body(eventResource);
     }
 }
