@@ -2,16 +2,19 @@ package me.liting.restapiwithspring.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.liting.restapiwithspring.common.RestDocsConfiguration;
 import me.liting.restapiwithspring.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs//RestDocs
+@Import(RestDocsConfiguration.class)//RestDocsConfiguration설정파일
 public class EventControllerTests {
 
     @Autowired
@@ -41,7 +47,7 @@ public class EventControllerTests {
 //    EventRepository eventRepository;//mock 으로 생성
 // api 입력값 이외에 에러발생 BadRequest로 응당 vs 받기로 한 값 이외는 무
     @Test
-    @TestDescription("정상적으로 이벤트를 생성하는 테스t")
+    @TestDescription("Trying to create new event with correct data.")
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -76,7 +82,7 @@ public class EventControllerTests {
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.query-events").exists())
                 .andExpect(jsonPath("_links.update-event").exists())
-
+                .andDo(document("create-event"))//name:create-event+ snippet
         ; // result : post request 201
     }
     @Test
