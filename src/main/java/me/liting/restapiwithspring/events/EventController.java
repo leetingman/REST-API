@@ -1,6 +1,7 @@
 package me.liting.restapiwithspring.events;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +70,7 @@ public class EventController {
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
 //        eventResource.add(selfLinkBuilder.withSelfRel()); EventResource 에서 직접 넣어줌
         eventResource.add(selfLinkBuilder.withRel("update-event"));//rel href
+        eventResource.add(Link.of("/docs/index.html#resource-events-create").withRel("profile"));
         return ResponseEntity.created(createdUri).body(eventResource);
     }
 }
