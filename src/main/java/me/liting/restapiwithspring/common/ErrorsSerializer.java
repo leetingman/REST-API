@@ -13,6 +13,7 @@ public class ErrorsSerializer extends JsonSerializer<Errors> {
 
     @Override
     public void serialize(Errors errors, JsonGenerator jen, SerializerProvider serializerProvider) throws IOException {
+        jen.writeFieldName("errors");//Json lib dose not allow start with Arr
         jen.writeStartArray();
         errors.getFieldErrors().forEach(e->{
             try {

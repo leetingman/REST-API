@@ -1,5 +1,6 @@
 package me.liting.restapiwithspring.events;
 
+import me.liting.restapiwithspring.common.ErrorsResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -40,7 +41,8 @@ public class EventController {
 
         if(errors.hasErrors()){
             //After Binding if has errors return badRequest
-            return ResponseEntity.badRequest().body(errors);
+            //extract method option+command+M
+            return badRequest(errors);
         }
 
         eventValidator.validate(eventDto,errors);
@@ -48,7 +50,7 @@ public class EventController {
 
         if(errors.hasErrors()){
             //After Binding if has errors return badRequest
-            return ResponseEntity.badRequest().body(errors);
+            return badRequest(errors);
         }
         //errors 는 json 으로 변환 불가
         //event object 는 javabean 스펙을 따름
@@ -72,5 +74,9 @@ public class EventController {
         eventResource.add(selfLinkBuilder.withRel("update-event"));//rel href
         eventResource.add(Link.of("/docs/index.html#resource-events-create").withRel("profile"));
         return ResponseEntity.created(createdUri).body(eventResource);
+    }
+
+    private ResponseEntity badRequest(Errors errors) {
+        return ResponseEntity.badRequest().body(ErrorsResource.modelOf(errors));
     }
 }
