@@ -1,6 +1,6 @@
 package me.liting.restapiwithspring.events;
 
-
+ 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.liting.restapiwithspring.common.RestDocsConfiguration;
 import me.liting.restapiwithspring.common.TestDescription;
@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs//RestDocs
 @Import(RestDocsConfiguration.class)//RestDocsConfiguration설정파일
+@ActiveProfiles("test")//application-test.properties 사용
 public class EventControllerTests {
 
     @Autowired
