@@ -2,6 +2,7 @@ package me.liting.restapiwithspring.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.liting.restapiwithspring.common.BaseControllerTest;
 import me.liting.restapiwithspring.common.RestDocsConfiguration;
 import me.liting.restapiwithspring.common.TestDescription;
 import org.hamcrest.Matchers;
@@ -37,27 +38,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-//@WebMvcTest // WEB과 관련된 bean 등록 조금더 빠름
-
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs//RestDocs
-@Import(RestDocsConfiguration.class)//RestDocsConfiguration설정파일
-@ActiveProfiles("test")//application-test.properties 사용
-public class EventControllerTests {
-
-    @Autowired
-    MockMvc mockMvc;    // web서버를 띄우지 않음 단위테스트보다는 느림  Repository용 빈 등록을 안함
-
-    @Autowired
-    ObjectMapper objectMapper;
+public class EventControllerTests extends BaseControllerTest {
 
     @Autowired
     EventRepository eventRepository;
-
-    @Autowired
-    ModelMapper modelMapper;
 
 //    @MockBean
 //    EventRepository eventRepository;//mock 으로 생성

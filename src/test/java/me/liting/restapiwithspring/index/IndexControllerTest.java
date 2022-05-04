@@ -1,6 +1,7 @@
 package me.liting.restapiwithspring.index;
 
 
+import me.liting.restapiwithspring.common.BaseControllerTest;
 import me.liting.restapiwithspring.common.RestDocsConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,17 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-@ActiveProfiles("test")
-public class IndexControllerTest {
-    @Autowired
-    MockMvc mockMvc;
-
+public class IndexControllerTest extends BaseControllerTest {
     @Test
     public void index() throws Exception {
         this.mockMvc.perform(get("/api/"))
