@@ -1,6 +1,7 @@
 package me.liting.restapiwithspring.events;
 
 import lombok.*;
+import me.liting.restapiwithspring.accounts.Account;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,7 +27,8 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)//default Odiner 후에 데이터 순서 바뀌면 데이터 꼬이루수도 있음 String 선ho
     private EventStatus eventStatus= EventStatus.DRAFT;
-
+    @ManyToOne
+    private Account manager;
 
     public void update() {
         //Update free
