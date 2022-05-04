@@ -1,31 +1,13 @@
 package me.liting.restapiwithspring.events;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.liting.restapiwithspring.common.BaseControllerTest;
-import me.liting.restapiwithspring.common.RestDocsConfiguration;
 import me.liting.restapiwithspring.common.TestDescription;
-import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 
