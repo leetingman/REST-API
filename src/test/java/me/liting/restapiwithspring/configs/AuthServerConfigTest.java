@@ -3,6 +3,7 @@ package me.liting.restapiwithspring.configs;
 import me.liting.restapiwithspring.accounts.Account;
 import me.liting.restapiwithspring.accounts.AccountRole;
 import me.liting.restapiwithspring.accounts.AccountService;
+import me.liting.restapiwithspring.common.AppProperties;
 import me.liting.restapiwithspring.common.BaseControllerTest;
 import me.liting.restapiwithspring.common.TestDescription;
 import org.junit.Test;
@@ -21,6 +22,9 @@ public class AuthServerConfigTest extends BaseControllerTest {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    AppProperties appProperties;
+
     /*
             grant Type
           1. password
@@ -36,22 +40,18 @@ public class AuthServerConfigTest extends BaseControllerTest {
     @TestDescription("인증 토큰을 발급 받는 테스트")
     public void getAuthToken() throws Exception{
         //Given
-        String username = "sts@gmail.com";
-        String password = "liting";
-        Account liting = Account.builder()
-                .email(username)
-                .password(password)
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build();
-        this.accountService.saveAccount(liting);
+//        Account liting = Account.builder()
+//                .email(appProperties.getUserUsername())
+//                .password(appProperties.getUserPassword())
+//                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                .build();
+//        this.accountService.saveAccount(liting);
 
-        String clientId="myApp";
-        String clientSecret="pass";
 
         this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId,clientSecret))
-                .param("username",username)
-                .param("password",password)
+                .with(httpBasic(appProperties.getClientId(),appProperties.getClientSecret()))
+                .param("username",appProperties.getAdminUsername())
+                .param("password",appProperties.getAdminPassword())
                 .param("grant_type","password")
         )
                 .andDo(print())

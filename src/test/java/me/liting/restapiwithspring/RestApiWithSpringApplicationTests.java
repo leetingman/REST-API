@@ -11,3 +11,10 @@ class RestApiWithSpringApplicationTests {
 	}
 
 }
+
+
+/*
+ ps ax | grep tomcat
+
+
+ */

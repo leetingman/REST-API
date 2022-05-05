@@ -1,8 +1,10 @@
 package me.liting.restapiwithspring.configs;
 
 import me.liting.restapiwithspring.accounts.Account;
+import me.liting.restapiwithspring.accounts.AccountRepository;
 import me.liting.restapiwithspring.accounts.AccountRole;
 import me.liting.restapiwithspring.accounts.AccountService;
+import me.liting.restapiwithspring.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -16,6 +18,9 @@ import java.util.Set;
 
 @Configuration
 public class AppConfig {
+
+
+
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
@@ -31,14 +36,31 @@ public class AppConfig {
         return new ApplicationRunner() {
             @Autowired
             AccountService accountService;
+
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Account liting = Account.builder()
-                        .email("st@gmail.com")
-                        .password("liting")
+//                Account liting = Account.builder()
+//                        .email("st@gmail.com")
+//                        .password("liting")
+//                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                        .build();
+//                accountService.saveAccount(liting);
+
+                Account admin = Account.builder()
+                        .email(appProperties.getAdminUsername())
+                        .password(appProperties.getAdminPassword())
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
-                accountService.saveAccount(liting);
+                accountService.saveAccount(admin);
+                Account user = Account.builder()
+                        .email(appProperties.getUserUsername())
+                        .password(appProperties.getUserPassword() )
+                        .roles(Set.of(AccountRole.USER))
+                        .build();
+                accountService.saveAccount(user);
             }
         };
     }

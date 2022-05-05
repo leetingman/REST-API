@@ -5,6 +5,7 @@ import me.liting.restapiwithspring.accounts.Account;
 import me.liting.restapiwithspring.accounts.AccountRepository;
 import me.liting.restapiwithspring.accounts.AccountRole;
 import me.liting.restapiwithspring.accounts.AccountService;
+import me.liting.restapiwithspring.common.AppProperties;
 import me.liting.restapiwithspring.common.BaseControllerTest;
 import me.liting.restapiwithspring.common.TestDescription;
 import org.junit.Before;
@@ -39,6 +40,10 @@ public class EventControllerTests extends BaseControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
+
     @Before
     public void setUp(){
         this.accountRepository.deleteAll();
@@ -147,22 +152,18 @@ public class EventControllerTests extends BaseControllerTest {
 
     private String getAccessToken() throws Exception {
         //Given
-        String username = "sts@gmail.com";
-        String password = "liting";
         Account liting = Account.builder()
-                .email(username)
-                .password(password)
+                .email(appProperties.getUserUsername())
+                .password(appProperties.getUserPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
         this.accountService.saveAccount(liting);
 
-        String clientId="myApp";
-        String clientSecret="pass";
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password")
         );
         var responseBody=perform.andReturn().getResponse().getContentAsString();
