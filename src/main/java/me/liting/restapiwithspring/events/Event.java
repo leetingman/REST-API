@@ -1,7 +1,9 @@
 package me.liting.restapiwithspring.events;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import me.liting.restapiwithspring.accounts.Account;
+import me.liting.restapiwithspring.accounts.AccountSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class Event {
     @Enumerated(EnumType.STRING)//default Odiner 후에 데이터 순서 바뀌면 데이터 꼬이루수도 있음 String 선ho
     private EventStatus eventStatus= EventStatus.DRAFT;
     @ManyToOne
+    @JsonSerialize(using= AccountSerializer.class)
     private Account manager;
 
     public void update() {
